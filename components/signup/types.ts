@@ -17,6 +17,24 @@ export const schemas = {
   gender: z.string().min(1, "성별을 선택해주세요"),
 };
 
+// Form schemas for each step
+export const formSchemas = {
+  email: z.object({ email: schemas.email }),
+  name: z.object({ name: schemas.name }),
+  phoneNumber: z.object({ phoneNumber: schemas.phoneNumber }),
+  birthday: z.object({ birthday: schemas.birthday }),
+  gender: z.object({ gender: schemas.gender }),
+};
+
+// Complete signup form schema (for the entire form)
+export const signupFormSchema = z.object({
+  email: schemas.email.optional(),
+  name: schemas.name.optional(),
+  phoneNumber: schemas.phoneNumber.optional(),
+  birthday: schemas.birthday.optional(),
+  gender: schemas.gender.optional(),
+});
+
 export type SignupContext = {
   name?: string;
   email?: string;

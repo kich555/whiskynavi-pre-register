@@ -2,7 +2,7 @@
 
 import { Button } from "@heroui/button";
 import { motion } from "framer-motion";
-import type { ReactNode } from "react";
+import type { ReactNode, RefObject } from "react";
 
 interface StepContainerProps {
   currentStep: number;
@@ -15,6 +15,7 @@ interface StepContainerProps {
   showBackButton?: boolean;
   direction?: "forward" | "backward";
   isLoading?: boolean;
+  nextButtonRef?: RefObject<HTMLButtonElement>;
 }
 
 export function StepContainer({
@@ -28,6 +29,7 @@ export function StepContainer({
   showBackButton = true,
   direction = "forward",
   isLoading = false,
+  nextButtonRef,
 }: StepContainerProps) {
   const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
   const slideDistance = isMobile ? 100 : 300;
@@ -80,6 +82,7 @@ export function StepContainer({
           </Button>
         )}
         <Button
+          ref={nextButtonRef}
           type="button"
           onClick={onNext}
           className="flex-1 backdrop-blur-md bg-black/30 border border-white/30 hover:bg-white/30 text-white font-semibold text-sm sm:text-base"

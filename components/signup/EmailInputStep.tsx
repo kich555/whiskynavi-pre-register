@@ -1,23 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { Controller, useFormContext } from "react-hook-form";
 import { StepContainer } from "./StepContainer";
 import { StepInput } from "./StepInput";
-import { type StepProps, schemas, totalSteps } from "./types";
+import { type StepProps, type SignupContext, totalSteps } from "./types";
 
 export function EmailInputStep(props: StepProps) {
   const { history, context, direction, setDirection } = props;
-  const [value, setValue] = useState(context.email || "");
-  const [error, setError] = useState("");
 
-  const handleNext = () => {
-    const result = schemas.email.safeParse(value);
-    if (!result.success) {
-      setError(result.error.issues[0].message);
-      return;
+  const {
+    control,
+    trigger,
+    getValues,
+    formState: { errors },
+  } = useFormContext<SignupContext>();
+
+  const handleNext = async () => {
+    const isValid = await trigger("email");
+    if (isValid) {
+      const email = getValues("email");
+      setDirection("forward");
+      history.push("nameInput", { ...context, email });
     }
-    setDirection("forward");
-    history.push("nameInput", { ...context, email: value });
   };
 
   const handleBack = () => {
@@ -34,17 +38,21 @@ export function EmailInputStep(props: StepProps) {
       onBack={handleBack}
       direction={direction}
     >
-      <StepInput
-        type="email"
-        value={value}
-        onChange={(newValue) => {
-          setValue(newValue);
-          setError("");
-        }}
-        onKeyPress={(e) => e.key === "Enter" && handleNext()}
-        label="이메일"
-        placeholder="example@email.com"
-        error={error}
+      <Controller
+        name="email"
+        control={control}
+        defaultValue={context.email || ""}
+        render={({ field }) => (
+          <StepInput
+            type="email"
+            value={field.value || ""}
+            onChange={field.onChange}
+            onKeyPress={(e) => e.key === "Enter" && handleNext()}
+            label="이메일"
+            placeholder="example@email.com"
+            error={errors.email?.message || ""}
+          />
+        )}
       />
     </StepContainer>
   );

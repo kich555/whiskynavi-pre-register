@@ -1,23 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { Controller, useFormContext } from "react-hook-form";
 import { StepContainer } from "./StepContainer";
 import { StepInput } from "./StepInput";
-import { type StepProps, schemas, totalSteps } from "./types";
+import { type StepProps, type SignupContext, totalSteps } from "./types";
 
 export function PhoneInputStep(props: StepProps) {
   const { history, context, direction, setDirection } = props;
-  const [value, setValue] = useState(context.phoneNumber || "");
-  const [error, setError] = useState("");
 
-  const handleNext = () => {
-    const result = schemas.phoneNumber.safeParse(value);
-    if (!result.success) {
-      setError(result.error.issues[0].message);
-      return;
+  const {
+    control,
+    trigger,
+    getValues,
+    formState: { errors },
+  } = useFormContext<SignupContext>();
+
+  const handleNext = async () => {
+    const isValid = await trigger("phoneNumber");
+    if (isValid) {
+      const phoneNumber = getValues("phoneNumber");
+      setDirection("forward");
+      history.push("birthdayInput", { ...context, phoneNumber });
     }
-    setDirection("forward");
-    history.push("birthdayInput", { ...context, phoneNumber: value });
   };
 
   const handleBack = () => {
@@ -34,17 +38,21 @@ export function PhoneInputStep(props: StepProps) {
       onBack={handleBack}
       direction={direction}
     >
-      <StepInput
-        type="number"
-        value={value}
-        onChange={(newValue) => {
-          setValue(newValue);
-          setError("");
-        }}
-        onKeyPress={(e) => e.key === "Enter" && handleNext()}
-        label="전화번호"
-        placeholder="000-0000-0000"
-        error={error}
+      <Controller
+        name="phoneNumber"
+        control={control}
+        defaultValue={context.phoneNumber || ""}
+        render={({ field }) => (
+          <StepInput
+            type="tel"
+            value={field.value || ""}
+            onChange={field.onChange}
+            onKeyPress={(e) => e.key === "Enter" && handleNext()}
+            label="전화번호"
+            placeholder="000-0000-0000"
+            error={errors.phoneNumber?.message || ""}
+          />
+        )}
       />
     </StepContainer>
   );

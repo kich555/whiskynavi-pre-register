@@ -2,11 +2,9 @@
 
 import { Button } from "@heroui/button";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import type { SignupContext } from "./types";
-
-interface CompleteStepProps {
-  context: SignupContext;
-}
 
 const phoneNumberFormatter = (phoneNumber: string) => {
   if (phoneNumber.length === 10) {
@@ -15,7 +13,29 @@ const phoneNumberFormatter = (phoneNumber: string) => {
   return phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
 };
 
-export function CompleteStep({ context }: CompleteStepProps) {
+export function CompleteStep() {
+  const router = useRouter();
+  const [signupData, setSignupData] = useState<SignupContext | null>(null);
+
+  useEffect(() => {
+    const data = sessionStorage.getItem("signup-data");
+    if (data) {
+      setSignupData(JSON.parse(data));
+    } else {
+      router.push("/");
+    }
+  }, [router]);
+
+  const handleReset = () => {
+    // sessionStorage 클리어
+    sessionStorage.removeItem("signup-data");
+    router.push("/");
+  };
+
+  if (!signupData) {
+    return null;
+  }
+
   return (
     <motion.div
       key="complete"
@@ -39,15 +59,15 @@ export function CompleteStep({ context }: CompleteStepProps) {
           사전등록 완료!
         </h1>
         <p className="text-base sm:text-lg text-gray-700 mb-6 sm:mb-8">
-          환영합니다, {context.name}님!
+          환영합니다, {signupData.name}님!
         </p>
         <div className="text-left text-gray-700 space-y-2 mb-6 sm:mb-8 text-sm sm:text-base mx-6">
-          <p>📧 {context.email}</p>
-          <p>📞 {phoneNumberFormatter(context.phoneNumber || "")}</p>
-          <p>📅 {context.birthday}</p>
+          <p>📧 {signupData.email}</p>
+          <p>📞 {phoneNumberFormatter(signupData.phoneNumber || "")}</p>
+          <p>📅 {signupData.birthday}</p>
         </div>
         <Button
-          onClick={() => window.location.reload()}
+          onClick={handleReset}
           className="w-full backdrop-blur-md bg-white/20 border border-white/30 hover:bg-white/30 text-white font-semibold text-sm sm:text-base"
           size="lg"
         >
