@@ -1,15 +1,12 @@
 "use client";
 
 import { InputOtp } from "@heroui/input-otp";
-import { useEffect, useRef } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { StepContainer } from "./StepContainer";
 import { type StepProps, type SignupContext, totalSteps } from "./types";
 
 export function BirthdayInputStep(props: StepProps) {
   const { history, context, direction, setDirection } = props;
-  const inputRef = useRef<HTMLDivElement>(null);
-  const nextButtonRef = useRef<HTMLButtonElement>(null);
 
   const {
     control,
@@ -18,21 +15,6 @@ export function BirthdayInputStep(props: StepProps) {
     setError,
     formState: { errors },
   } = useFormContext<SignupContext>();
-
-  useEffect(() => {
-    // 컴포넌트가 마운트되면 첫 번째 input에 포커스
-    const timer = setTimeout(() => {
-      const firstInput = inputRef.current?.querySelector("input");
-      if (firstInput) {
-        // 모바일에서도 키보드를 띄우기 위해 click과 focus를 모두 호출
-        firstInput.click();
-        firstInput.focus();
-        
-      }
-    }, 300); // 애니메이션 완료 후 포커스
-
-    return () => clearTimeout(timer);
-  }, []);
 
   const handleNext = async () => {
     const birthday = getValues("birthday");
@@ -43,7 +25,7 @@ export function BirthdayInputStep(props: StepProps) {
       });
       return;
     }
-    
+
     const isValid = await trigger("birthday");
     if (isValid) {
       // 8자리 숫자를 YYYY-MM-DD 형식으로 변환
@@ -51,7 +33,7 @@ export function BirthdayInputStep(props: StepProps) {
       const month = birthday.slice(4, 6);
       const day = birthday.slice(6, 8);
       const formattedBirthday = `${year}-${month}-${day}`;
-      
+
       setDirection("forward");
       history.push("genderInput", {
         ...context,
@@ -81,13 +63,12 @@ export function BirthdayInputStep(props: StepProps) {
       onNext={handleNext}
       onBack={handleBack}
       direction={direction}
-      nextButtonRef={nextButtonRef}
     >
       <div className="flex flex-col gap-2">
         <label htmlFor="birthday" className="text-xs sm:text-sm text-white/90">
           생년월일
         </label>
-        <div ref={inputRef}>
+        <div>
           <Controller
             name="birthday"
             control={control}
@@ -96,6 +77,7 @@ export function BirthdayInputStep(props: StepProps) {
               <InputOtp
                 size="md"
                 length={8}
+                autoFocus={true}
                 value={field.value || ""}
                 onValueChange={(value) => {
                   field.onChange(value);
@@ -104,10 +86,6 @@ export function BirthdayInputStep(props: StepProps) {
                     // 마지막 input에서 포커스 제거 (blink effect 제거)
                     const activeElement = document.activeElement as HTMLElement;
                     activeElement?.blur();
-                    
-                    setTimeout(() => {
-                      nextButtonRef.current?.focus();
-                    }, 100);
                   }
                 }}
                 classNames={{

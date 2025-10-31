@@ -1,11 +1,9 @@
 import { z } from "zod";
 
 export const schemas = {
-  privacyConsent: z
-    .boolean()
-    .refine((val) => val === true, {
-      message: "개인정보 수집 및 이용에 동의해주세요",
-    }),
+  privacyConsent: z.boolean().refine((val) => val === true, {
+    message: "개인정보 수집 및 이용에 동의해주세요",
+  }),
   name: z
     .string()
     .min(1, "이름을 입력해주세요")

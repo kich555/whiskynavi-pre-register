@@ -45,15 +45,16 @@ export function PrivacyConsentStep(props: StepProps) {
             </p>
             <div className="space-y-2 text-gray-700">
               <p>
-                <strong>수집 목적:</strong> 사전 등록 및 <br/> 추후 정식 서비스 오픈 시 서비스 제공
+                <strong>수집 목적:</strong> 사전 등록 및 <br /> 추후 정식 서비스
+                오픈 시 서비스 제공
               </p>
               <p>
                 <strong>수집 항목:</strong> 이름, 이메일, 전화번호, 생년월일,
                 성별
               </p>
               <p>
-                <strong>보유 기간:</strong> 회원 탈퇴 시까지 또는 관계 법령에 따른
-                보존 기간
+                <strong>보유 기간:</strong> 회원 탈퇴 시까지 또는 관계 법령에
+                따른 보존 기간
               </p>
             </div>
             <p className="text-gray-700text-xs">
@@ -92,4 +93,3 @@ export function PrivacyConsentStep(props: StepProps) {
     </StepContainer>
   );
 }
-

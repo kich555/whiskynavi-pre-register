@@ -7,8 +7,6 @@ import usePresign from "@/hooks/usePresign";
 import { StepContainer } from "./StepContainer";
 import { type StepProps, type SignupContext, totalSteps } from "./types";
 
-
-
 export function GenderInputStep(props: StepProps) {
   const { history, context, direction, setDirection } = props;
   const { mutate: presign, isPending } = usePresign();
@@ -21,7 +19,6 @@ export function GenderInputStep(props: StepProps) {
     setError,
     formState: { errors },
   } = useFormContext<SignupContext>();
-  
 
   const handleNext = async () => {
     const isValid = await trigger("gender");
