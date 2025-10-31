@@ -10,6 +10,7 @@ import { EmailInputStep } from "@/components/signup/EmailInputStep";
 import { GenderInputStep } from "@/components/signup/GenderInputStep";
 import { NameInputStep } from "@/components/signup/NameInputStep";
 import { PhoneInputStep } from "@/components/signup/PhoneInputStep";
+import { PrivacyConsentStep } from "@/components/signup/PrivacyConsentStep";
 import {
   signupFormSchema,
   type SignupContext,
@@ -23,6 +24,7 @@ const SignUpFunnel = () => {
   });
 
   const funnel = useFunnel<{
+    privacyConsent: SignupContext;
     emailInput: SignupContext;
     nameInput: SignupContext;
     phoneInput: SignupContext;
@@ -31,7 +33,7 @@ const SignUpFunnel = () => {
   }>({
     id: "signup-funnel",
     initial: {
-      step: "emailInput",
+      step: "privacyConsent",
       context: {},
     },
   });
@@ -68,6 +70,13 @@ const SignUpFunnel = () => {
         <div className="w-full max-w-lg grid my-auto">
           <AnimatePresence initial={false}>
             <funnel.Render
+              privacyConsent={(props) => (
+                <PrivacyConsentStep
+                  {...props}
+                  direction={direction}
+                  setDirection={setDirection}
+                />
+              )}
               emailInput={(props) => (
                 <EmailInputStep
                   {...props}

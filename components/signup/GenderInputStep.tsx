@@ -54,7 +54,7 @@ export function GenderInputStep(props: StepProps) {
 
   return (
     <StepContainer
-      currentStep={5}
+      currentStep={6}
       totalSteps={totalSteps}
       title="성별을 선택해주세요"
       onNext={handleNext}

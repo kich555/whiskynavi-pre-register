@@ -31,7 +31,7 @@ export function EmailInputStep(props: StepProps) {
 
   return (
     <StepContainer
-      currentStep={1}
+      currentStep={2}
       totalSteps={totalSteps}
       title="이메일을 입력해주세요"
       onNext={handleNext}

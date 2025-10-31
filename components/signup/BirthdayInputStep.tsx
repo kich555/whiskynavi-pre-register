@@ -70,7 +70,7 @@ export function BirthdayInputStep(props: StepProps) {
 
   return (
     <StepContainer
-      currentStep={4}
+      currentStep={5}
       totalSteps={totalSteps}
       title="생년월일을 입력해주세요"
       onNext={handleNext}

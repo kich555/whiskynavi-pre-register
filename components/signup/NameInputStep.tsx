@@ -31,7 +31,7 @@ export function NameInputStep(props: StepProps) {
 
   return (
     <StepContainer
-      currentStep={2}
+      currentStep={3}
       totalSteps={totalSteps}
       title="이름을 입력해주세요"
       onNext={handleNext}

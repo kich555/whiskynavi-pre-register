@@ -1,6 +1,11 @@
 import { z } from "zod";
 
 export const schemas = {
+  privacyConsent: z
+    .boolean()
+    .refine((val) => val === true, {
+      message: "개인정보 수집 및 이용에 동의해주세요",
+    }),
   name: z
     .string()
     .min(1, "이름을 입력해주세요")
@@ -19,6 +24,7 @@ export const schemas = {
 
 // Form schemas for each step
 export const formSchemas = {
+  privacyConsent: z.object({ privacyConsent: schemas.privacyConsent }),
   email: z.object({ email: schemas.email }),
   name: z.object({ name: schemas.name }),
   phoneNumber: z.object({ phoneNumber: schemas.phoneNumber }),
@@ -28,6 +34,7 @@ export const formSchemas = {
 
 // Complete signup form schema (for the entire form)
 export const signupFormSchema = z.object({
+  privacyConsent: schemas.privacyConsent.optional(),
   email: schemas.email.optional(),
   name: schemas.name.optional(),
   phoneNumber: schemas.phoneNumber.optional(),
@@ -36,6 +43,7 @@ export const signupFormSchema = z.object({
 });
 
 export type SignupContext = {
+  privacyConsent?: boolean;
   name?: string;
   email?: string;
   phoneNumber?: string;

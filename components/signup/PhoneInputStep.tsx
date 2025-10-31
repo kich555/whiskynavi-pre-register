@@ -31,7 +31,7 @@ export function PhoneInputStep(props: StepProps) {
 
   return (
     <StepContainer
-      currentStep={3}
+      currentStep={4}
       totalSteps={totalSteps}
       title="전화번호를 입력해주세요"
       onNext={handleNext}
