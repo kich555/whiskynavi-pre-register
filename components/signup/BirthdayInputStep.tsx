@@ -27,10 +27,7 @@ export function BirthdayInputStep(props: StepProps) {
         // 모바일에서도 키보드를 띄우기 위해 click과 focus를 모두 호출
         firstInput.click();
         firstInput.focus();
-        // iOS에서 키보드 강제 표시
-        if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-          firstInput.setAttribute("readonly", "false");
-        }
+        
       }
     }, 300); // 애니메이션 완료 후 포커스
 
