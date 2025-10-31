@@ -23,7 +23,15 @@ export function BirthdayInputStep(props: StepProps) {
     // 컴포넌트가 마운트되면 첫 번째 input에 포커스
     const timer = setTimeout(() => {
       const firstInput = inputRef.current?.querySelector("input");
-      firstInput?.focus();
+      if (firstInput) {
+        // 모바일에서도 키보드를 띄우기 위해 click과 focus를 모두 호출
+        firstInput.click();
+        firstInput.focus();
+        // iOS에서 키보드 강제 표시
+        if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+          firstInput.setAttribute("readonly", "false");
+        }
+      }
     }, 300); // 애니메이션 완료 후 포커스
 
     return () => clearTimeout(timer);
@@ -94,8 +102,12 @@ export function BirthdayInputStep(props: StepProps) {
                 value={field.value || ""}
                 onValueChange={(value) => {
                   field.onChange(value);
-                  // 8자리가 모두 입력되면 Next 버튼으로 포커스 이동
+                  // 8자리가 모두 입력되면 현재 input blur 처리 후 Next 버튼으로 포커스 이동
                   if (value.length === 8) {
+                    // 마지막 input에서 포커스 제거 (blink effect 제거)
+                    const activeElement = document.activeElement as HTMLElement;
+                    activeElement?.blur();
+                    
                     setTimeout(() => {
                       nextButtonRef.current?.focus();
                     }, 100);
